@@ -1,0 +1,12 @@
+# Render Blueprint — деплой мини-приложения одной кнопкой (render.com)
+# Сервис отдаёт и статику, и принимает опт-заявки по POST /api/lead.
+services:
+  - type: web
+    name: fresconti-max-miniapp
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: node server.js
+    envVars:
+      - key: BOT_TOKEN
+        sync: false   # задаётся вручную в дашборде Render (секрет)

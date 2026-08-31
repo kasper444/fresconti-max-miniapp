@@ -1,0 +1,14 @@
+{
+  "name": "fresconti-max-miniapp",
+  "version": "1.0.0",
+  "description": "Мини-приложение «FRESCONTI» для мессенджера MAX (каталог премиальных солений и маринадов, покупка на Wildberries)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
