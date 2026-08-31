@@ -19,7 +19,9 @@
     category: 'all',
     search: '',
     favorites: new Set(),
-    currentProduct: null
+    currentProduct: null,
+    prices: {},
+    pricesUpdatedAt: null
   };
 
   // ---------- Утилиты ----------
@@ -28,11 +30,19 @@
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
   }); }
   function fmtVol(v) { return v || ''; }
+  function fmtPrice(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' \u20bd'; }
   function fmtRating(p) {
     if (p.rating && p.reviews >= 3) return '★ ' + p.rating.toFixed(1) + ' · ' + p.reviews + ' отз.';
     return '';
   }
   function wbLink(p) { return p.wb || G.brand.wbBrand; }
+  function priceHtml(p) {
+    var pr = state.prices[p.id];
+    if (!pr || !pr.price) return '';
+    var h = '<span class="price-now">' + fmtPrice(pr.price) + '</span>';
+    if (pr.oldPrice && pr.oldPrice > pr.price) h += ' <s class="price-old">' + fmtPrice(pr.oldPrice) + '</s>';
+    return h;
+  }
 
   function haptic() {
     try { if (WebApp.HapticFeedback && WebApp.HapticFeedback.selectionChanged) WebApp.HapticFeedback.selectionChanged(); } catch (e) {}
@@ -137,6 +147,7 @@
       '<div class="product-body">' +
         '<h3 class="product-name">' + esc(p.name) + '</h3>' +
         '<div class="product-vol">' + esc(fmtVol(p.vol)) + '</div>' +
+        (priceHtml(p) ? '<div class="product-price">' + priceHtml(p) + '</div>' : '') +
         (rating ? '<div class="product-rating">' + esc(rating) + '</div>' : '') +
         '<div class="product-actions">' +
           '<button class="buy-btn" data-act="buy">Купить</button>' +
@@ -203,6 +214,7 @@
     var r = fmtRating(p);
     $('#pmMeta').innerHTML = '<span class="star">' + esc(r) + '</span>'
       + (r ? ' · ' : '') + esc(fmtVol(p.vol));
+    $('#pmPrice').innerHTML = priceHtml(p);
     $('#pmDesc').textContent = p.desc || '';
     $('#pmFav').innerHTML = (state.favorites.has(p.id) ? '♥ Убрать из избранного' : '♥ В избранное');
     $('#productModal').hidden = false;
@@ -311,6 +323,25 @@
     toast('Шаринг доступен внутри MAX');
   }
 
+  // ---------- Цены (парсер prices.json) ----------
+  function loadPrices() {
+    fetch('prices.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('no prices'); return r.json(); })
+      .then(function (data) {
+        state.prices = data || {};
+        state.pricesUpdatedAt = (data && data._updatedAt) || null;
+        var note = $('#priceNote');
+        if (state.pricesUpdatedAt) {
+          var d = state.pricesUpdatedAt.slice(0, 10).split('-').reverse().join('.');
+          note.textContent = 'Цены с Wildberries · обновлены ' + d;
+          note.hidden = false;
+        }
+        renderProducts();
+        if (state.currentProduct) $('#pmPrice').innerHTML = priceHtml(state.currentProduct);
+      })
+      .catch(function () { /* нет prices.json — показываем без цен */ });
+  }
+
   // ---------- Инициализация ----------
   function bind() {
     $('#favBtn').addEventListener('click', function () { showScreen('favoritesScreen'); haptic(); });
@@ -346,6 +377,7 @@
     initUser();
     bind();
     renderAll();
+    loadPrices();
     loadFavorites(function () { renderAll(); updateFavBadge(); });
     updateFavBadge();
   }

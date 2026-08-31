@@ -1,0 +1,72 @@
+{
+  "_updatedAt": "2026-08-31T23:33:00Z",
+  "_dest": "-1257786",
+  "arabiata-ns": {
+    "price": 318,
+    "oldPrice": 750
+  },
+  "baklazhany-chesnok": {
+    "price": 457,
+    "oldPrice": 1330
+  },
+  "baziliko-ns": {
+    "price": 324,
+    "oldPrice": 750
+  },
+  "brusketta-keshyu": {
+    "price": 534,
+    "oldPrice": 1670
+  },
+  "brusketta-olivki": {
+    "price": 521,
+    "oldPrice": 1630
+  },
+  "chesnok": {
+    "price": 488,
+    "oldPrice": 1650
+  },
+  "italiano-ns": {
+    "price": 318,
+    "oldPrice": 750
+  },
+  "khalapeno-350": {
+    "price": 324,
+    "oldPrice": 810
+  },
+  "khalapeno-krasnyy": {
+    "price": 267,
+    "oldPrice": 815
+  },
+  "konfityur-apelsin": {
+    "price": 384,
+    "oldPrice": 980
+  },
+  "kornishony-350": {
+    "price": 410,
+    "oldPrice": 747
+  },
+  "ogurtsy-narezka": {
+    "price": 626,
+    "oldPrice": 1780
+  },
+  "relish": {
+    "price": 388,
+    "oldPrice": 970
+  },
+  "sliva-v-masle": {
+    "price": 784,
+    "oldPrice": 1960
+  },
+  "tomato-ns": {
+    "price": 318,
+    "oldPrice": 750
+  },
+  "tomaty-ochishchennye": {
+    "price": 588,
+    "oldPrice": 1500
+  },
+  "tomaty-vyalenye": {
+    "price": 411,
+    "oldPrice": 1050
+  }
+}
