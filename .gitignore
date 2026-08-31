@@ -3,3 +3,9 @@ leads.json
 .env
 *.log
 .DS_Store
+
+# Секреты (DPAPI) — локально, не коммитить
+secrets/
+secrets.py
+scripts/get_bot_token.py
+
