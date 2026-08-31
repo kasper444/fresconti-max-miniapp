@@ -33,7 +33,7 @@ def search_url(page=1, spp=100):
             '&suppressSpellcheck=false')
 
 
-def fetch_json(url, attempts=4):
+def fetch_json(url, attempts=6):
     last = None
     for i in range(attempts):
         try:
@@ -41,9 +41,15 @@ def fetch_json(url, attempts=4):
             with urllib.request.urlopen(req, timeout=30) as r:
                 raw = r.read()
             return json.loads(raw.decode('utf-8'))
-        except Exception as e:  # 429 / таймаут / сеть
+        except urllib.error.HTTPError as e:
             last = e
-            time.sleep(2 * (i + 1))
+            # уважаем Retry-After (WB шлёт при 429), иначе экспоненциальный бэкофф
+            retry_after = e.headers.get('Retry-After') if e.headers else None
+            wait = float(retry_after) if retry_after else min(60, 4 * (2 ** i))
+            time.sleep(wait)
+        except Exception as e:  # таймаут / сеть
+            last = e
+            time.sleep(4 * (i + 1))
     raise last
 
 
@@ -104,6 +110,28 @@ def main():
         if wb in price_map:
             out[pid] = price_map[wb]
             found += 1
+
+    # Защита от затирания: если не удалось получить ни одной цены
+    # (лимит WB / сеть) — НЕ трогаем существующий prices.json.
+    if found == 0:
+        print('WARN: не получено ни одной цены (429/сеть) — prices.json не тронут.')
+        return
+
+    # Сравниваем ТОЛЬКО цены (без _updatedAt/_dest), чтобы не коммитить
+    # файл при каждом запуске из-за смены таймстампа.
+    def price_part(d):
+        return {k: v for k, v in d.items() if not k.startswith('_')}
+
+    old = {}
+    if os.path.exists(OUT):
+        try:
+            old = json.load(open(OUT, encoding='utf-8'))
+        except Exception:
+            old = {}
+
+    if price_part(old) == price_part(out):
+        print('Цены не изменились: %d/%d товаров (файл не тронут).' % (found, len(ids)))
+        return
 
     with open(OUT, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
