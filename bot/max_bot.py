@@ -31,7 +31,7 @@ DEEPSEEK_KEY = get_secret('deepseek_api_key') or os.environ.get('DEEPSEEK_API_KE
 LLM_MODEL = os.environ.get('MAX_BOT_LLM_MODEL', 'deepseek-chat')
 
 HISTORY_LIMIT = 12  # сообщений на чат в контексте LLM
-POLL_TIMEOUT = 10   # long polling, сек (сервер держит ~1.6x этого значения)
+POLL_TIMEOUT = 2    # long polling, сек (короткий — сеть к API MAX нестабильна)
 
 
 # ---------------- HTTP ----------------
@@ -228,7 +228,7 @@ def main():
             data = get_updates(marker)
         except Exception as e:
             print('[updates error]', e)
-            time.sleep(3)
+            time.sleep(1)
             continue
         for upd in data.get('updates') or []:
             try:
