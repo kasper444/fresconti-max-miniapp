@@ -31,7 +31,7 @@ DEEPSEEK_KEY = get_secret('deepseek_api_key') or os.environ.get('DEEPSEEK_API_KE
 LLM_MODEL = os.environ.get('MAX_BOT_LLM_MODEL', 'deepseek-chat')
 
 HISTORY_LIMIT = 12  # сообщений на чат в контексте LLM
-POLL_TIMEOUT = 25   # long polling, сек
+POLL_TIMEOUT = 10   # long polling, сек (сервер держит ~1.6x этого значения)
 
 
 # ---------------- HTTP ----------------
@@ -45,7 +45,7 @@ def http(method, url, query=None, body=None, headers=None):
         h.update(headers)
     req = urllib.request.Request(url, data=data, headers=h, method=method)
     try:
-        with urllib.request.urlopen(req, timeout=POLL_TIMEOUT + 15) as r:
+        with urllib.request.urlopen(req, timeout=POLL_TIMEOUT + 20) as r:
             raw = r.read()
         return json.loads(raw.decode('utf-8')) if raw else {}
     except urllib.error.HTTPError as e:
