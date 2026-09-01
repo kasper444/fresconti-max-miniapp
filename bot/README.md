@@ -19,14 +19,15 @@ python bot/max_bot.py
 - Ответ: `POST /messages?chat_id=<id>` с телом `{"text": "..."}`, заголовок `Authorization: <token>`.
 - Контекст LLM: системный промпт консультанта + живой каталог (категории, цены) + история чата.
 
-## Круглосуточная работа
+## Круглосуточная работа (настроено)
 
-Бот — долгоживущий процесс, должен работать непрерывно. Варианты на Windows:
+Бот работает через keepalive-обёртку `bot/keepalive.py` (перезапуск при падении, лог `logs/bot.log`),
+которую скрыто запускает `bot/run_bot_hidden.vbs` (pythonw, без окна).
 
-1. **NSSM (рекомендуется)** — служба Windows с автоперезапуском:
-   `nssm install fresconti-bot "C:\...\python.exe" "C:\Users\1\fresconti-max-miniapp\bot\max_bot.py"`
-2. **pm2**: `pm2 start bot/max_bot.py --interpreter python --name fresconti-bot`
-3. **Планировщик задач** (запуск при входе).
+- **Автозапуск при входе в Windows**: `run_bot_hidden.vbs` скопирован в папку автозагрузки
+  (`Start Menu\Programs\Startup\FrescontiBot.vbs`) — стартует при входе в систему, независимо от Hermes.
+- **Запуск вручную**: `python bot/keepalive.py` или `wscript bot/run_bot_hidden.vbs`.
+- Используется независимый Python (uv, 3.11.15) — не привязан к Hermes.
 
-Локально (в рамках сеанса Hermes) бот можно держать как фоновый процесс:
-`python bot/max_bot.py &`.
+Чтобы остановить: закрыть процессы `pythonw.exe`/`python.exe` с этим сценарием и удалить
+`FrescontiBot.vbs` из автозагрузки.
