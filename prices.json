@@ -1,12 +1,12 @@
 {
-  "_updatedAt": "2026-09-03T16:45:12Z",
+  "_updatedAt": "2026-09-03T22:46:17Z",
   "_dest": "-1257786",
   "arabiata-ns": {
     "price": 318,
     "oldPrice": 750
   },
   "baklazhany-chesnok": {
-    "price": 400,
+    "price": 457,
     "oldPrice": 1330
   },
   "baziliko-ns": {
@@ -42,8 +42,8 @@
     "oldPrice": 980
   },
   "kornishony-350": {
-    "price": 410,
-    "oldPrice": 747
+    "price": 418,
+    "oldPrice": 763
   },
   "ogurtsy-narezka": {
     "price": 626,
@@ -58,7 +58,7 @@
     "oldPrice": 1960
   },
   "tomato-ns": {
-    "price": 318,
+    "price": 278,
     "oldPrice": 750
   },
   "tomaty-ochishchennye": {
