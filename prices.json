@@ -1,5 +1,5 @@
 {
-  "_updatedAt": "2026-09-04T12:24:37Z",
+  "_updatedAt": "2026-09-05T00:25:35Z",
   "_dest": "-1257786",
   "arabiata-ns": {
     "price": 318,
@@ -30,7 +30,7 @@
     "oldPrice": 750
   },
   "khalapeno-350": {
-    "price": 324,
+    "price": 283,
     "oldPrice": 810
   },
   "khalapeno-krasnyy": {
@@ -38,11 +38,11 @@
     "oldPrice": 815
   },
   "konfityur-apelsin": {
-    "price": 384,
+    "price": 336,
     "oldPrice": 980
   },
   "kornishony-350": {
-    "price": 418,
+    "price": 406,
     "oldPrice": 763
   },
   "ogurtsy-narezka": {
@@ -58,7 +58,7 @@
     "oldPrice": 1960
   },
   "tomato-ns": {
-    "price": 318,
+    "price": 278,
     "oldPrice": 750
   },
   "tomaty-ochishchennye": {
